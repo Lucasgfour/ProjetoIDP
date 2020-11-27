@@ -1,0 +1,55 @@
+package br.com.libertas.model;
+
+import java.io.PrintWriter;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import com.google.gson.Gson;
+import br.com.libertas.db.UsuarioDao;
+
+/**
+ * Servlet implementation class ExcluiUsuario
+ */
+@WebServlet("/ExcluiUsuario")
+public class ExcluiUsuario extends HttpServlet implements Modelo {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ExcluiUsuario() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			
+			UsuarioDao uDao = new UsuarioDao();
+			Gson gson = new Gson();
+			
+			int id = Integer.parseInt(request.getParameter("idUserCad"));
+			
+			PrintWriter out = response.getWriter();
+			String res = gson.toJson(uDao.excluir(id));
+			out.print(res);
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	/*protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}*/
+
+}

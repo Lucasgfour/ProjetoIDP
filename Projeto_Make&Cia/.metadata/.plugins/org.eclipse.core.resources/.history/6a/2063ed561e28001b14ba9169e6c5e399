@@ -1,0 +1,207 @@
+package br.com.libertas.db;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.LinkedList;
+
+import com.google.gson.JsonObject;
+
+import br.com.libertas.dto.Fornecedor;
+
+public class FornecedorDao {
+	
+	/** @author Thulio Barbosa de Paula Martins
+	 *  @date 15-11-2020
+	 *  @Descripition Responsavel por realizar a inserção de um Fornecedor
+	 *  @param Fornecedor f
+	 *  @return JsonObejct resposta
+	 */ 
+	public JsonObject inserir(Fornecedor f) {
+		
+		boolean cond = true;
+		String saida = "Sem retorno!";
+		JsonObject resposta = new JsonObject();
+		Conexao con = new Conexao();
+		
+		try {
+			String sql = "INSERT INTO cad_fornecedor (nome, cnpj, endereco, cidade, telefone) VALUES"
+					+ "(?,?,?,?,?)";
+			
+			PreparedStatement prep = con.getConexao().prepareStatement(sql);
+			prep.setString(1, f.getNome());
+			prep.setString(2, f.getCnpj());
+			prep.setString(3, f.getEndereco());
+			prep.setString(4, f.getCidade());
+			prep.setString(5, f.getTelefone());
+			prep.execute();
+			
+			saida = "Fornecedor cadastrado com sucesso!";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			saida = "Não foi possivel cadastrar o fornecedor, motivo : " + e.toString();
+			cond = false;
+		}
+		con.desconecta();
+		
+		resposta.addProperty("Condição", cond);
+		resposta.addProperty("Mensagem" , saida);
+		
+		return resposta;
+		
+	}
+	
+	/** @author Thulio Barbosa de Paula Martins
+	 *  @date 15-11-2020
+	 *  @Descripition Responsavel por realizar a exclusão de um fornecedor
+	 *  @param int id
+	 *  @return JsonObject resposta
+	 */
+	public JsonObject excluir(int id) {
+		
+		boolean cond = true;
+		String saida = "Sem retorno!";
+		JsonObject resposta = new JsonObject();
+		Conexao con = new Conexao();
+		
+		try {
+			
+			String sql = "DELETE FROM cad_forncedor WHERE id = ?";
+			PreparedStatement prep = con.getConexao().prepareStatement(sql);
+			prep.setInt(1, id);
+			prep.execute();
+			
+			saida = "Fornecedor excluído com sucesso!";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			saida = "Não foi possível exlcuir o Fornecedor, motivo: " + e.toString();
+			cond = false;
+		}
+		con.desconecta();
+		
+		resposta.addProperty("Condição", cond);
+		resposta.addProperty("Mensagem", saida);
+		
+		return resposta;
+	}
+	
+	/** @author Thulio Barbosa de Paula Martins
+	 *  @date 15-11-2020
+	 *  @Descripition Responsavel por realizar a alteração de um Fornecedor
+	 *  @param Fornecedor f
+	 *  @return JsonObject resposta
+	 */
+	public JsonObject alterar(Fornecedor f) {
+		
+		boolean cond = true;
+		String mensagem = "Sem retorno!";
+		JsonObject resposta = new JsonObject();
+		Conexao con = new Conexao();
+		
+		try {
+			
+			String sql = "UPDATE cad_fornecedor SET nome=?, cnpj=?, endereco=?, cidade=?, telefone=? WHERE id=?";
+			
+			PreparedStatement prep = con.getConexao().prepareStatement(sql);
+			prep.setString(1, f.getNome());
+			prep.setString(2, f.getCnpj());
+			prep.setString(3, f.getEndereco());
+			prep.setString(4, f.getCidade());
+			prep.setString(5, f.getTelefone());
+			prep.setInt(6, f.getId());
+			prep.execute();
+			
+			mensagem = "Fornecedor atualizado com sucesso!";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			mensagem = "Não foi possível atualizar o Fornecedor, motivo: "+ e.toString();
+			cond = false;
+		}
+		
+		con.desconecta();
+		
+		resposta.addProperty("Condição", cond);
+		resposta.addProperty("Mensagem" , mensagem);
+		
+		return resposta;
+	}
+	
+	/** @author Thulio Barbosa de Paula Martins
+	 *  @date 15-11-2020
+	 *  @Descripition Responsavel por realizar a consulta de um Fornecedor
+	 *  @param int id
+	 *  @return Fornecedor f
+	 */
+	public Fornecedor consultar(int id) {
+		
+		Fornecedor f = new Fornecedor();
+		Conexao con = new Conexao();
+		
+		System.out.print("Parametro => " + id);
+		
+		try {
+			
+			String sql = "SELECT * FROM cad_fornecedor WHERE id = " + id;
+			
+			Statement sta = con.getConexao().createStatement();
+			ResultSet res = sta.executeQuery(sql);
+			
+			if (res.next()) {
+				f.setNome(res.getString("nome"));
+				f.setCnpj(res.getString("cnpj"));
+				f.setEndereco(res.getString("endereco"));
+				f.setCidade(res.getString("cidade"));
+				f.setTelefone(res.getString("telefone"));
+				f.setId(res.getInt("id"));
+			}
+			
+			res.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		con.desconecta();
+		
+		return f;
+	}
+	
+	/** @author Thulio Barbosa de Paula Martins
+	 *  @date 15-11-2020
+	 *  @Descripition Responsavel por listar todas categorias
+	 *  @param int id
+	 *  @return LinkedList listaFornecedor
+	 */
+	public LinkedList<Fornecedor> listar(){
+		
+		Conexao con = new Conexao();
+		LinkedList<Fornecedor> listaFornecedor = new LinkedList<Fornecedor>();
+		
+		try {
+			
+			String sql = "SELECT * FROM cad_categoria";
+			
+			Statement sta = con.getConexao().createStatement();
+			ResultSet res = sta.executeQuery(sql);
+			
+			while (res.next()) {
+				Categoria c = new Categoria();
+				c.setNome(res.getString("nome"));
+				c.setDescricao(res.getString("descricao"));
+				c.setId(res.getInt("id"));
+				listaCategoria.add(c);
+				
+			}
+			res.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		con.desconecta();
+		
+		return listaCategoria;
+	}
+
+}

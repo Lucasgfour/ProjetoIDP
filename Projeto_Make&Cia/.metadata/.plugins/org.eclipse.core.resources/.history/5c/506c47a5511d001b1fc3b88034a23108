@@ -1,0 +1,22 @@
+let btnCadProduto = document.querySelector("#btnCadastraProduto");
+alert("teste");
+
+function formCadProduto() { // Faz a comunicação com o servidor
+
+	let formCadProduto = document.querySelector("#form-cadastro-produto");
+	let btnCadProduto = document.querySelector("#btnCadastraProduto");
+
+	// Desativa o refresh do formulário
+	formCadProduto.addEventListener('submit', (event) => {
+		event.preventDefault();
+	});
+	
+	btnCadProduto.addEventListener('click', () => {
+		
+		fetch("/Controller?service=InserirProduto")
+			.then(response => response.json())
+		
+	});
+
+}
+

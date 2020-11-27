@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Make & Cia</title>
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet"
+	href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="bower_components/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="bower_components/Ionicons/css/ionicons.min.css">
+<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+<link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+<link rel="stylesheet" href="data-table/jquery.dataTables.min.css">
+<style>
+.modal-content {
+	height: calc(100vh - 100px);
+	overflow: auto;
+}
+</style>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+
+		<header class="main-header">
+
+			<a href="index2.html" class="logo"> <span class="logo-mini">Make
+					& Cia</span> <span class="logo-lg">Make & Cia</span>
+			</a>
+
+			<nav class="navbar navbar-static-top" role="navigation">
+
+				<a href="#" class="sidebar-toggle" data-toggle="push-menu"
+					role="button"> <span class="sr-only">Toggle navigation</span>
+				</a>
+
+				<div class="navbar-custom-menu">
+					<ul class="nav navbar-nav">
+
+						<li class="dropdown user user-menu"><a href="#"
+							class="dropdown-toggle" data-toggle="dropdown"> <img
+								src="dist/img/avatar5.png" class="user-image" alt="User Image">
+
+								<span class="hidden-xs">Maison</span>
+						</a>
+							<ul class="dropdown-menu">
+
+								<li class="user-header"><img src="dist/img/avatar5.png"
+									class="img-circle" alt="User Image">
+
+									<p>
+										Fulano Junior - Web Developer <small>Membro desde Abr.
+											2018</small>
+									</p></li>
+								<!-- Menu Body -->
+								<li class="user-body">
+									<div class="row">
+										<div class="col-xs-4 text-center">
+											<a href="#">Followers</a>
+										</div>
+										<div class="col-xs-4 text-center">
+											<a href="#">Sales</a>
+										</div>
+										<div class="col-xs-4 text-center">
+											<a href="#">Friends</a>
+										</div>
+									</div> <!-- /.row -->
+								</li>
+								<!-- Menu Footer-->
+								<li class="user-footer">
+									<div class="pull-left">
+										<a href="#" class="btn btn-default btn-flat">Perfil</a>
+									</div>
+									<div class="pull-right">
+										<a href="#" class="btn btn-default btn-flat">Sair</a>
+									</div>
+								</li>
+							</ul></li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+
+		<aside class="main-sidebar">
+
+			<section class="sidebar">
+
+				<div class="user-panel">
+					<div class="pull-left image">
+						<img src="dist/img/avatar5.png" class="img-circle"
+							alt="User Image">
+					</div>
+					<div class="pull-left info">
+						<p>Maison</p>
+						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+					</div>
+				</div>
+
+				<ul class="sidebar-menu" data-widget="tree">
+					<li class="header">MENU</li>
+					<!-- Optionally, you can add icons to the links -->
+					<li class="active"><a href="#"><i
+							class="fa fa-cart-arrow-down"></i> <span id="btnVendas">Vendas</span></a></li>
+					<br>
+					<li class="active"><a href="#"><i
+							class="fa fa-product-hunt"></i> <span id="btnCadastroProduto">Cadastro
+								de Produtos</span></a></li>
+					<br>
+					<li class="active"><a href="#"><i class="fa fa-user-plus"></i>
+							<span id="btnCadastroUsuario">Cadastro de Usuários</span></a></li>
+					<br>
+					<li class="active"><a href="#"><i class="fa fa-get-pocket"></i>
+							<span id="btnCategoria">Categorias</span></a></li>
+					<br>
+					<li class="active"><a href="#"><i class="fa fa-users"></i>
+							<span id="btnFornecedor">Fornecedores</span></a></li> 
+					<br>
+					<li class="active"><a href="#"><i class="fa fa-usd"></i> <span
+							id="btnContasPagar">Contas a Pagar</span></a></li>
+					<br>
+					<li class="active"><a href="#"><i class="fa fa-usd"></i> <span
+							id="btnContasReceber">Contas a Receber</span></a></li>
+					<br>
+					<li class="active"><a href="#"><i class="fa fa-file-pdf-o"></i>
+							<span id="btnRelatorios">Relatórios</span></a></li>
+				</ul>
+
+			</section>
+
+		</aside>
+
+		<!--  Tela de vendas -->
+		<div class="content-wrapper" id="show_vendas">
+
+			<section class="content-header">
+				<h1>Vendas</h1>
+			</section>
+
+			<section class="content container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Itens do Carrinho</h3>
+							</div>
+							<div class="box-body no-padding">
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Descrição</th>
+												<th>Preço</th>
+												<th>Quantidade</th>
+												<th>Ação</th>
+											</tr>
+										</thead>
+										<tbody id="tabela-itens-vendas">
+
+										</tbody>
+									</table>
+									<div class="alert alert-primary" role="alert">
+										<button type="button" class="btn btn-default btn-cancel"
+											id="btnFinalizarVenda">Finalizar Venda</button>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal" tabindex="-1" role="dialog"
+						id="ModalFormCarrinho" style="display: none;">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h3 class="box-title" id="box-cadastro-carrinho">Pré
+										Carrinho</h3>
+								</div>
+								<div class="modal-body">
+
+									<form role="form" id="form-pre-carrinho">
+										<div class="box-body">
+											<div class="form-group">
+												<input type="hidden" class="form-control" id="identCad"
+													name="identCad">
+											</div>
+											<div class="form-group">
+												<label for="reCarDescricao">Descrição</label> <input
+													type="text" class="form-control" id="preCarDescricao"
+													placeholder="Descrição do Produto" name="preCarDescricao"
+													required disabled>
+											</div>
+											<div class="form-group">
+												<label for="preCarPreco-venda">Preco</label> <input
+													type="number" class="form-control" id="preCarPreco-venda"
+													placeholder="Preço de venda" name="preCarPreco-venda"
+													required disabled>
+											</div>
+											<div class="form-group">
+												<label for="preCarQuantidade">Quantidade</label> <input
+													type="number" class="form-control" id="preCarQuantidade"
+													placeholder="Quantidade" name="preCarQuantidade" required>
+											</div>
+										</div>
+										<div class="box-footer">
+											<button type="button" class="btn btn-success"
+												id="addCarrinho" name="addCarrinho">Adicionar ao
+												Carrinho</button>
+											<button type="button" class="btn btn-default"
+												id="btnCancelarModalCarrinho" name="btnCancelarModalCarrinho">Cancelar</button>
+										</div>
+									</form>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal -->
+				<div class="modal" tabindex="-1" role="dialog"
+					id="ModalFinalizaVenda" style="display: none;">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h3 class="modal-title">Finalizar Venda</h3>
+							</div>
+							<div class="modal-body">
+								<label for="valorTotalVenda">Valor da Compra</label> <input
+									type="text" class="form-control" id="valorTotalVenda"
+									name="valorTotalVenda" disabled> <br> <label
+									for="formaPagamento">Forma de pagamento</label> <select
+									class="form-control" id="formaPagamento" name="formaPagamento">
+									<option value="" selected="selected">Formas de
+										pagamento</option>
+									<option value="dinheiro">Dinheiro</option>
+									<option value="cartaoDebito">Cartão de Debito</option>
+									<option value="cartaoCredito">Cartão de Credito</option>
+								</select> <br> <label for="valorRecebido">Valor Recebido</label> <input
+									type="text" class="form-control" id="valorRecebido"
+									name="valorRecebido" placeholder="Valor Recebido"> <br>
+
+								<label for="valorTroco">Troco</label> <input type="text"
+									class="form-control" id="valorTroco" name="valorTroco"
+									placeholder="Valor a devolver" disabled> <br>
+
+								<button type="button" class="btn btn-primary"
+									id="btnCalcularTroco">Calcular Troco</button>
+
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-success "
+									id="btnModalConcluir">Concluir</button>
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal" id="btnModalCancelar">Cancelar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box">
+							<div class="box-body no-padding">
+								<div class="box-header">
+									<h3 class="box-title">Lista de Produtos</h3>
+								</div>
+								<div class="table-responsive">
+									<table id="table-produtos-vendas" class="display">
+										<thead>
+											<tr>
+												<th>Codigo</th>
+												<th>Descrição</th>
+												<th>Custo</th>
+												<th>Venda</th>
+												<th>Categoria</th>
+												<th>Fornecedor</th>
+												<th>Estoque</th>
+												<th>Ação</th>
+											</tr>
+										</thead>
+										<tbody id="tabela-produtos-carrinho">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- Tela Cadastro de Produto -->
+		<div class="content-wrapper" id="show_cadastro-produto"
+			style="display: none;">
+
+			<section class="content-header">
+				<h1>Cadastro de Produto</h1>
+			</section>
+
+			<section class="content container-fluid">
+
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Lista de Produtos</h3>
+							</div>
+							<div class="box-body no-padding">
+								<div class="table-responsive">
+									<table id="table-produtos" class="display">
+										<thead>
+											<tr>
+												<th>Codigo</th>
+												<th>Descrição</th>
+												<th>Custo</th>
+												<th>Venda</th>
+												<th>Categoria</th>
+												<th>Fornecedor</th>
+												<th>Estoque</th>
+												<th>Ações</th>
+											</tr>
+										</thead>
+										<tbody id="tabela-produtos">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-12">
+
+						<div class="row">
+
+							<div class="col-xs-12">
+								<div class="col-md-6">
+									<button type="button" class="btn btn-primary"
+										id="btnNovoProduto">Novo Produto</button>
+								</div>
+
+							</div>
+
+						</div>
+
+						<!-- Formulário de cadastro de produto -->
+						<div class="modal" tabindex="-1" role="dialog"
+							id="ModalFormProduto" style="display: none;">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h3 class="box-title" id="box-cadastro-produto-titulo">Novo
+											Produto</h3>
+									</div>
+									<div class="modal-body">
+
+
+										<form role="form" id="form-cadastro-produto">
+											<div class="box-body">
+												<div class="form-group">
+													<input type="hidden" class="form-control" id="identCad"
+														name="identCad">
+												</div>
+												<div class="form-group">
+													<label for="codigo">Codigo</label> <input type="text"
+														class="form-control" id="codigo"
+														placeholder="Descrição do Produto" name="codigo" required>
+												</div>
+												<div class="form-group">
+													<label for="descricao">Descrição</label> <input type="text"
+														class="form-control" id="descricao"
+														placeholder="Descrição do Produto" name="descricao"
+														required>
+												</div>
+												<div class="form-group">
+													<label for="preco-custo">Preco de custo</label> <input
+														type="number" class="form-control" id="preco-custo"
+														placeholder="Preço de custo" name="preco-custo" required
+														step=".01">
+												</div>
+												<div class="form-group">
+													<label for="preco-venda">Preco de venda</label> <input
+														type="number" class="form-control" id="preco-venda"
+														placeholder="Preço de venda" name="preco-venda" required
+														step=".01">
+												</div>
+												<div class="form-group">
+													<label for="categoria">Categoria</label> <input
+														type="number" class="form-control" id="categoria"
+														placeholder="Categoria do produto" name="categoria"
+														required>
+												</div>
+												<div class="form-group">
+													<label for="fornecedor">Fornecedor</label> <input
+														type="number" class="form-control" id="fornecedor"
+														placeholder="Fornecedor do produto" name="fornecedor"
+														required>
+												</div>
+												<div class="form-group">
+													<label for="qtd-estoque">Estoque</label> <input
+														type="number" class="form-control" id="qtd-estoque"
+														placeholder="Quantidade de estoque" name="qtd-estoque"
+														required>
+												</div>
+											</div>
+
+											<div class="box-footer">
+												<button type="submit" class="btn btn-success"
+													id="btnCadastraProduto">Salvar</button>
+												<button type="button" class="btn btn-default btn-cancel"
+													id="btnCancelarProduto">Cancelar</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- Modal generico para confirmação -->
+		<div class="modal" tabindex="-1" role="dialog" id="modalConfirm">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Confirmação</h5>
+					</div>
+					<div class="modal-body">
+						<p id="pModal"></p>
+					</div>
+					<div class="modal-footer" id="modalBotoes"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tela cadastro de usuários -->
+		<div class="content-wrapper" id="show_cadastro-usuario"
+			style="display: none;">
+
+			<section class="content-header">
+				<h1>Cadastro de Usuários</h1>
+			</section>
+
+			<section class="content container-fluid">
+
+				<div class="row">
+					<div class="col-md-12">
+
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Lista de Usuários</h3>
+							</div>
+
+							<div class="box-body no-padding">
+								<table id="table-usuarios" class="display">
+									<thead>
+										<tr>
+											<th>Nome</th>
+											<th>Login</th>
+											<th>Administrador</th>
+											<th>Acões</th>
+										</tr>
+									</thead>
+									<tbody id="tabela-usuarios">
+
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+
+				<div class="col-md-12">
+					<div class="row">
+
+						<div class="col-xs-12">
+							<div class="col-md-6">
+								<button type="button" class="btn btn-primary"
+									id="btnNovoUsuario">Novo Usuário</button>
+							</div>
+
+						</div>
+
+					</div>
+
+
+					<div class="modal" tabindex="-1" role="dialog"
+						id="ModalFormUsuario" style="display: none;">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h3 class="box-title" id="box-cadastro-usuario-titulo">Novo
+										Usuário</h3>
+								</div>
+								<div class="modal-body">
+
+									<form role="form" id="form-cadastro-usuario">
+										<div class="box-body">
+											<div class="form-group">
+												<input type="hidden" class="form-control" id="idUserCad"
+													name="idUserCad">
+											</div>
+											<div class="form-group">
+												<label for="nome">Nome</label> <input type="text"
+													class="form-control" id="nome"
+													placeholder="Digite o nome do usuário" name="nome">
+											</div>
+											<div class="form-group">
+												<label for="login">Login</label> <input type="text"
+													class="form-control" id="login"
+													placeholder="Digite o login do usuário" name="login">
+											</div>
+											<div class="form-group">
+												<label for="senha">Senha</label> <input type="password"
+													class="form-control" id="senha" name="senha"
+													placeholder="Digite sua senha">
+											</div>
+											<div class="checkbox">
+												<label> <input type="checkbox" id="administrador"
+													name="administrador"> Administrador
+												</label>
+											</div>
+											<div class="form-group">
+												<input type="hidden" class="form-control" id="isAdmin"
+													name="isAdmin">
+											</div>
+										</div>
+										<div class="box-footer">
+											<button type="submit" id="btnCadastroUser"
+												class="btn btn-success">Salvar</button>
+											<button type="button" class="btn btn-default btn-cancel"
+												id="btnCancelarUsuario">Cancelar</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</section>
+		</div>
+		
+		<!-- Categoria -->
+		<div class="content-wrapper" id="show_categoria"
+			style="display: none;">
+
+			<section class="content-header">
+				<h1>Cadastro de Categoria</h1>
+			</section>
+
+			<section class="content container-fluid">
+
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Categorias</h3>
+							</div>
+							<div class="box-body no-padding">
+								<div class="table-responsive">
+									<table id="table-categoria" class="display">
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>Nome</th>
+												<th>Descrição</th>
+												<th>Ações</th>
+											</tr>
+										</thead>
+										<tbody id="tabela-categoria">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-12">
+
+						<div class="row">
+
+							<div class="col-xs-12">
+								<div class="col-md-6">
+									<button type="button" class="btn btn-primary"
+										id="btnNovaCategoria">Nova Categoria</button>
+								</div>
+
+							</div>
+
+						</div>
+
+						<!-- Formulário de cadastro de categoria -->
+						<div class="modal" tabindex="-1" role="dialog"
+							id="ModalFormCategoria" style="display: none;">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h3 class="box-title" id="box-cadastro-categoria-titulo">Nova
+											Categoria</h3>
+									</div>
+									<div class="modal-body">
+
+
+										<form role="form" id="form-cadastro-categoria">
+											<div class="box-body">
+												<div class="form-group">
+													<input type="hidden" class="form-control" id="identCad"
+														name="identCad">
+												</div>
+												<div class="form-group">
+													<label for="nomeCategoria">Nome</label> <input type="text"
+														class="form-control" id="nomeCategoria"
+														placeholder="Nome da Categoria" name="nomeCategoria" required>
+												</div>
+												<div class="form-group">
+													<label for="descricaoCategoria">Descrição</label> <input type="text"
+														class="form-control" id="descricaoCategoria"
+														placeholder="Descrição da Categoria" name="descricaoCategoria"
+														required>
+												</div>
+											</div>
+
+											<div class="box-footer">
+												<button type="submit" class="btn btn-success"
+													id="btnCadastraCategoria">Salvar</button>
+												<button type="button" class="btn btn-default btn-cancel"
+													id="btnCancelarCategoria">Cancelar</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+		</div>
+		
+		
+		
+		
+		<!-- Fornecedor -->
+		<div class="content-wrapper" id="show_fornecedor"
+			style="display: none;">
+
+			<section class="content-header">
+				<h1>Cadastro de Fornecedor</h1>
+			</section>
+
+			<section class="content container-fluid">
+
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Fornecedores</h3>
+							</div>
+							<div class="box-body no-padding">
+								<div class="table-responsive">
+									<table id="table-fornecedor" class="display">
+										<thead>
+											<tr>
+												<th>Nome</th>
+												<th>CNPJ</th>
+												<th>Endereço</th>
+												<th>Cidade</th>
+												<th>Telefone</th>
+												<th>Ações</th>
+											</tr>
+										</thead>
+										<tbody id="tabela-fornecedor">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-12">
+
+						<div class="row">
+
+							<div class="col-xs-12">
+								<div class="col-md-6">
+									<button type="button" class="btn btn-primary"
+										id="btnNovoFornecedor">Novo Fornecedor</button>
+								</div>
+
+							</div>
+
+						</div>
+
+						<!-- Formulário de cadastro de fornecedor -->
+						<div class="modal" tabindex="-1" role="dialog"
+							id="ModalFormFornecedor" style="display: none;">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h3 class="box-title" id="box-cadastro-fornecedor-titulo">Novo
+											Fornecedor</h3>
+									</div>
+									<div class="modal-body">
+
+										<form role="form" id="form-cadastro-fornecedor">
+											<div class="box-body">
+												<div class="form-group">
+													<input type="hidden" class="form-control" id="identCad"
+														name="identCad">
+												</div>
+												<div class="form-group">
+													<label for="nomeFornecedor">Nome</label> <input type="text"
+														class="form-control" id="nomeFornecedor"
+														placeholder="Nome do Fornecedor" name="nomeFornecedor">
+												</div>
+												<div class="form-group">
+													<label for="cnpjFornecedor">CNPJ</label> <input type="text"
+														class="form-control" id="cnpjFornecedor"
+														placeholder="CNPJ do Fornecedor" name="cnpjFornecedor">
+												</div>
+												<div class="form-group">
+													<label for="enderecoFornecedor">Endereço</label> <input type="text"
+														class="form-control" id="enderecoFornecedor"
+														placeholder="Endereço do Fornecedor" name="enderecoFornecedor">
+												</div>
+												<div class="form-group">
+													<label for="cidadeFornecedor">Cidade</label> <input type="text"
+														class="form-control" id="cidadeFornecedor"
+														placeholder="Cidade do Fornecedor" name="cidadeFornecedor"
+														required>
+												</div>
+												<div class="form-group">
+													<label for="telefoneFornecedor">Telefone</label> <input type="text"
+														class="form-control" id="telefoneFornecedor"
+														placeholder="Telefone do Fornecedor" name="telefoneFornecedor"
+														required>
+												</div>
+											</div>
+
+											<div class="box-footer">
+												<button type="submit" class="btn btn-success"
+													id="btnCadastraFornecedor">Salvar</button>
+												<button type="button" class="btn btn-default btn-cancel"
+													id="btnCancelarFornecedor">Cancelar</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+		</div>
+		
+		
+		
+		
+
+		<footer class="main-footer"> Projeto desenvolvido por LFI
+			Sistemas. </footer>
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="data-table/jquery.dataTables.min.js"></script>
+	<script src="js/util.js"></script>
+	<script src="js/CadastroProduto.js"></script>
+	<script src="js/CadastroUsuario.js"></script>
+	<script src="js/Vendas.js"></script>
+	<script src="js/Categoria.js"></script>
+	<script src="js/Fornecedor.js"></script>
+	<script src="js/bootstrap-notify.min.js"></script>
+	<script src="index.js"></script>
+
+
+
+</body>
+
+</html>

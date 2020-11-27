@@ -1,0 +1,12 @@
+INDEX VERSION 1.131+C:\Users\Thulio Barbosa\Documents\GitHub\Make_and_Cia\Make_and_Cia\Projeto_Make&Cia\.metadata\.plugins\org.eclipse.jdt.core
+3052604183.index
+3543422066.index
+1550874051.index
+1711079872.index
+2829651258.index
+558563097.index
+102801787.index
+605575456.index
+1706508719.index
+3114050088.index
+3345283679.index
