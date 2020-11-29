@@ -95,23 +95,9 @@ class Vendas {
 				
 				let modal = document.querySelector("#ModalFormCarrinho");
 				modal.style.display = "none";
-			
-				let tabelaCarrinho = document.querySelector("#tabela-itens-vendas");
-				let tr = document.createElement('tr');
-				this.carrinho[id.value] = [desc.value, preco.value, quantidade.value];
-				//this.carrinho.push([id.value, desc.value, preco.value, quantidade.value]);
-				tr.innerHTML += `
-					<td>${desc.value}</td>
-					<td>${"R$ " + preco.value}</td>
-					<td>${quantidade.value}</td>
-					<td>
-			            <button type="button" class="btn btn-danger btn-xs btn-flat" onclick="excluiItemCarrinho(${id.value})">Remover</button>
-			        </td> 
-		    	`;
-
-				tr.id = id.value;
-		
-				tabelaCarrinho.appendChild(tr);
+				this.carrinho[id.value] = {"produto":id.value, "preco":preco.value, "quantidade":quantidade.value, "descricao":desc.value};
+				limpaTabelaCarrinho();
+				preencheTabelaCarrinho(this.carrinho);
 				
 				valorItemAtual = (preco.value * quantidade.value);
 				
@@ -168,14 +154,22 @@ class Vendas {
 		document.querySelector("#btnCadastrarVenda").addEventListener('click', () => {
 
 			let modal = document.querySelector("#ModalFinalizaVenda");
+			// Transformar carrinho em String
+			var produtos = "";
+			for(var key in this.carrinho) {
+				produtos = produtos + this.carrinho[key]["produto"] + "/" + this.carrinho[key]["quantidade"] + "/" + this.carrinho[key]["preco"] + ";";
+			}
 			
+			$("#vendaProdutos").val(produtos);
 			requestAjax("InserirVenda", this.formularioVenda).then(
 				
 			(retorno) => {
 				modal.style.display = "none";
 				$.notify({ message: retorno.Mensagem  },{ type: 'info', placement: { from: 'top', align: 'center' } });
 				if(retorno.Condicao) {
-							
+					limpaTabelaCarrinho();
+					this.carrinho = {};
+					this.listaProdutos();
 				}
 				
 		   	}, 
@@ -231,3 +225,33 @@ function excluiItemCarrinho(id) {
 	
 }
 
+function limpaTabelaCarrinho() {
+
+	let tabela = document.querySelector("#tabela-itens-vendas");
+	
+	[...tabela.children].forEach( (tr) => {
+			tr.remove();
+	});
+}
+
+function preencheTabelaCarrinho(Carrinho) {
+	for(var key in Carrinho) {
+				let tabelaCarrinho = document.querySelector("#tabela-itens-vendas");
+				let tr = document.createElement('tr');
+				
+				//this.carrinho.push([id.value, desc.value, preco.value, quantidade.value]);
+				tr.innerHTML += `
+					<td>${Carrinho[key]["descricao"]}</td>
+					<td>${"R$ " + Carrinho[key]["preco"]}</td>
+					<td>${Carrinho[key]["quantidade"]}</td>
+					<td>
+			            <button type="button" class="btn btn-danger btn-xs btn-flat" onclick="excluiItemCarrinho(${Carrinho[key]["produto"]})">Remover</button>
+			        </td> 
+		    	`;
+
+				tr.id = Carrinho[key]["produto"];
+		
+				tabelaCarrinho.appendChild(tr);
+	}
+	
+}

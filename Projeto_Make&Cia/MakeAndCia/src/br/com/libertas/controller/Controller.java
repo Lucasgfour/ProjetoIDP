@@ -23,7 +23,7 @@ import br.com.libertas.model.Modelo;
 
 public class Controller extends HttpServlet {
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L; 
 
 
 	/**

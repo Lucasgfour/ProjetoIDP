@@ -119,6 +119,32 @@ class CadastroProduto {
 		);
 	
 	};
+	
+	atualizaDadosFormulario() {
+		requestAjax("ListarFornecedor", this.formulario).then(
+			
+			(retorno) => {
+				var valForn = "";
+				retorno.forEach((campo) => {
+					valForn += `
+					<option value='${campo.id}'>${campo.nome}</option>`;
+				});
+				$("#fornecedor").html(valForn);
+			}
+		);
+		
+		requestAjax("ListarCategoria", this.formulario).then(
+			
+			(retorno) => {
+				var valCate = "";
+				retorno.forEach((campo) => {
+					valCate += `
+					<option value='${campo.id}'>${campo.nome}</option>`;
+				});
+				$("#categoria").html(valCate);
+			}
+		);
+	}
 
 	mostraFormularioCad() {
 		this.formularioCad.reset();
@@ -128,14 +154,16 @@ class CadastroProduto {
 		id.value = 0;
 
 		let modal = document.querySelector("#ModalFormProduto");
+		this.atualizaDadosFormulario();
 		modal.style.display = "block";
     }
 
     mostraFormularioEdit() {
         document.querySelector("#box-cadastro-produto-titulo").innerHTML = "Alterar Produto";
         let modal = document.querySelector("#ModalFormProduto");
+		this.atualizaDadosFormulario();
 		modal.style.display = "block";
-    }	
+    }		
 
 }
 

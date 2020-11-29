@@ -4,7 +4,7 @@ public class VendasProduto {
 	private int id_VendaProdutos;
 	private int pedido;
 	private int produto;
-	private double preço;
+	private double preco;
 	private int quantidade;
 	
 	public int getQuantidade() {
@@ -31,11 +31,11 @@ public class VendasProduto {
 	public void setProduto(int produto) {
 		this.produto = produto;
 	}
-	public double getPreço() {
-		return preço;
+	public double getPreco() {
+		return preco;
 	}
-	public void setPreço(double preço) {
-		this.preço = preço;
+	public void setPreco(double preço) {
+		this.preco = preço;
 	}
 	
 }

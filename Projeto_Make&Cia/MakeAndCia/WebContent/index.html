@@ -249,12 +249,13 @@
 									type="text" class="form-control" id="valorTotalVenda"
 									name="valorTotalVenda" onkeypress="$(this).mask('99.999')" disabled> <br>
 									<form id="formularioVenda"> 
-									<label for="formaPagamento">Forma de pagamento</label> 
+										<label for="formaPagamento">Forma de pagamento</label> 
 										<select class="form-control" id="formaPagamento" name="formaPagamento">
-											<option value="dinheiro">Dinheiro</option>
-											<option value="cartaoDebito">Cartão de Debito</option>
-											<option value="cartaoCredito">Cartão de Credito</option>
+											<option value="Dinheiro">Dinheiro</option>
+											<option value="Cartão Debito">Cartão de Debito</option>
+											<option value="Cartão Credito">Cartão de Credito</option>
 										</select>
+										<input type="hidden" id="vendaProdutos" name="vendaProdutos">
 									</form> 
 								<br> <label for="valorRecebido">Valor Recebido</label> <input
 									type="text" class="form-control" id="valorRecebido"
@@ -399,31 +400,31 @@
 												<div class="form-group">
 													<label for="preco-custo">Preco de custo</label> <input
 														type="number" class="form-control" id="preco-custo"
-														placeholder="Preço de custo" name="preco-custo" onkeypress="$(this).mask('99.990')" required
+														placeholder="Preço de custo" name="preco-custo" onkeypress="$(this).mask('#,##0.00', {reverse: true})" required
 														step=".01">
 												</div>
 												<div class="form-group">
 													<label for="preco-venda">Preco de venda</label> <input
 														type="number" class="form-control" id="preco-venda"
-														placeholder="Preço de venda" name="preco-venda" onkeypress="$(this).mask('99.990')" required
+														placeholder="Preço de venda" name="preco-venda" onkeypress="$(this).mask('#,##0.00', {reverse: true})" required
 														step=".01">
 												</div>
 												<div class="form-group">
-													<label for="categoria">Categoria</label> <input
-														type="text" class="form-control" id="categoria"
-														placeholder="Categoria do produto" name="categoria" maxlength="2"
-														required>
+													<label for="formaPagamento">Categoria</label> 
+													<select class="form-control" id="categoria" name="categoria">
+	
+													</select>
 												</div>
 												<div class="form-group">
-													<label for="fornecedor">Fornecedor</label> <input
-														type="number" class="form-control" id="fornecedor"
-														placeholder="Fornecedor do produto" name="fornecedor" maxlength="6"
-														required>
+													<label for="formaPagamento">Fornecedor</label> 
+													<select class="form-control" id="fornecedor" name="fornecedor">
+	
+													</select>
 												</div>
 												<div class="form-group">
 													<label for="qtd-estoque">Estoque</label> <input
 														type="number" class="form-control" id="qtd-estoque"
-														placeholder="Quantidade de estoque" name="qtd-estoque" onkeypress="$(this).mask('99.990')"
+														placeholder="Quantidade de estoque" name="qtd-estoque" onkeypress="$(this).mask('#,##0.00', {reverse: true})"
 														required>
 												</div>
 											</div>
@@ -864,7 +865,7 @@
 												<div class="form-group">
 													<label for="valorContasPagar">Valor</label> <input type="text"
 														class="form-control" id="valorContasPagar"
-														placeholder="Valor da conta" name="valorContasPagar" step=".01" onkeypress="$(this).mask('99.990')" required>
+														placeholder="Valor da conta" name="valorContasPagar"onkeypress="$(this).mask('#,##0.00', {reverse: true})" required>
 												</div>
 												<div class="form-group">
 													<label for="dataContasPagar">Data</label> <input type="date"
@@ -993,7 +994,7 @@
 												<div class="form-group">
 													<label for="valorContasReceber">Valor</label> <input type="text"
 														class="form-control" id="valorContasReceber"
-														placeholder="Valor da conta" name="valorContasReceber" step=".01" onkeypress="$(this).mask('99.990')" required>
+														placeholder="Valor da conta" name="valorContasReceber"onkeypress="$(this).mask('#,##0.00', {reverse: true})" required>
 												</div>
 												<div class="form-group">
 													<label for="dataContasReceber">Data</label> <input type="date"

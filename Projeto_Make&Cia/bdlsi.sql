@@ -55,26 +55,7 @@ create table vendas(
     PRIMARY KEY(id_venda)
 )ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
 
--- Tabela cad_fornecedor
 
-CREATE TABLE cad_fornecedor(
-	id INT NOT NULL AUTO_INCREMENT,
-	nome VARCHAR(50) NOT NULL,
-	cnpj VARCHAR(18) NOT NULL,
-	endereco VARCHAR(80) NOT NULL,
-	cidade VARCHAR(40) NOT NULL,
-	telefone VARCHAR(20) NOT NULL,
-	PRIMARY KEY(id)
-)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
-
--- Tabela cad_categoria
-
-CREATE TABLE cad_categoria(
-	id INT NOT NULL AUTO_INCREMENT,
-	nome VARCHAR(50) NOT NULL,
-	descricao VARCHAR(70) NOT NULL,
-	PRIMARY KEY(id)
-)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
 
 -- Tabela Cadastro de contas a pagar
 

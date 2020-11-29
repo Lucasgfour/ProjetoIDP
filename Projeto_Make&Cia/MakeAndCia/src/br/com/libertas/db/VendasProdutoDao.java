@@ -30,8 +30,8 @@ public class VendasProdutoDao {
 				PreparedStatement prep = con.getConexao().prepareStatement(sql);
 				prep.setInt(1, v.getPedido());
 				prep.setInt(2, v.getProduto());
-				prep.setDouble(3, v.getPreço());
-				prep.setInt(3, v.getQuantidade());
+				prep.setDouble(3, v.getPreco());
+				prep.setInt(4, v.getQuantidade());
 				prep.execute();
 				
 				saida = "Produto da venda cadastrado com sucesso!";
@@ -100,7 +100,7 @@ public class VendasProdutoDao {
 			PreparedStatement prep = con.getConexao().prepareStatement(sql);
 			prep.setInt(1, v.getPedido());
 			prep.setInt(2, v.getProduto());
-			prep.setDouble(3, v.getPreço());
+			prep.setDouble(3, v.getPreco());
 			prep.setInt(4, v.getQuantidade());
 			prep.setInt(5, v.getId_VendaProdutos());
 		
@@ -145,7 +145,7 @@ public class VendasProdutoDao {
 					v.setId_VendaProdutos(res.getInt("id_VendasProdutos"));
 					v.setPedido(res.getInt("pedido"));
 					v.setProduto(res.getInt("produto"));
-					v.setPreço(res.getDouble("preço"));
+					v.setPreco(res.getDouble("preço"));
 					v.setProduto(res.getInt("quantidade"));
 				}
 				
@@ -183,7 +183,7 @@ public class VendasProdutoDao {
 					v.setId_VendaProdutos(res.getInt("id_VendasProdutos"));
 					v.setPedido(res.getInt("pedido"));
 					v.setProduto(res.getInt("produto"));
-					v.setPreço(res.getDouble("preço"));
+					v.setPreco(res.getDouble("preço"));
 					v.setProduto(res.getInt("quantidade"));
 					listaVendasProduto.add(v);
 					
