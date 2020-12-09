@@ -85,10 +85,51 @@ CREATE TABLE cad_contaReceber(
 
 
 
---------------------* Criando todos os Stored Procedures *--------------------
 
+--------------------* Criando todas as Views *--------------------
 
--- - -- - -- Stored Procedure: Tabela cad_produto -- - -- - -- - 
+-- Visão responsável por listar todos os produtos cadastrados.
+
+CREATE OR REPLACE VIEW listarProduto AS 
+	SELECT * FROM cad_produto;
+
+-- Visão responsável por listar todos os fornecedores cadastrados.
+
+CREATE OR REPLACE VIEW listarFornecedor AS 
+	SELECT * FROM cad_fornecedor;
+	
+-- Visão responsável por listar as contas a pagar por determinado período.
+
+CREATE OR REPLACE VIEW listarContaPagar AS 
+	SELECT * FROM cad_contaPagar WHERE (`data` >= '?' AND `data` <= '?');
+	
+-- Visão responsável por listar as contas a receber por determinado período.
+
+CREATE OR REPLACE VIEW listarContaReceber AS 
+	SELECT * FROM cad_contaReceber WHERE (`data` >= '?' AND `data` <= '?');
+
+-- Visão responsável por detalhar todas as vendas feitas em um determinado período.
+
+CREATE OR REPLACE VIEW listarVenda AS 
+	SELECT v.`data` AS 'Data da venda', p.descricao AS 'Produto vendido', vp.quantidade AS 'Quantidade',
+	vp.preço AS 'Valor', v.forma_pagamento AS 'Forma de pagamento' FROM vendas v INNER JOIN vendasProduto vp 
+	ON v.id_venda = vp.pedido INNER JOIN cad_produto p
+	ON p.id = vp.produto
+	WHERE (v.`data` >= '?' AND v.`data` <= '?')
+	ORDER BY v.`data`;
+	
+-- Visão responsável por listar as vendas por determinada forma de pagamento.
+
+CREATE OR REPLACE VIEW listarVendaPorPagamento AS
+	SELECT v.`data` AS 'Data da venda', p.descricao AS 'Produto vendido', vp.quantidade AS 'Quantidade',
+	vp.preço AS 'Valor', FROM vendas v INNER JOIN vendasProduto vp 
+	ON v.id_venda = vp.pedido INNER JOIN cad_produto p
+	ON p.id = vp.produto
+	WHERE v.forma_pagamento = '?';
+	
+	
+	
+--------------------* Criando todas as Functions *--------------------
 
 
 -- Function responsável por inserir um novo produto.
@@ -101,6 +142,23 @@ BEGIN
 	VALUES (codigo_p, descricao_p, preco_custo_p, preco_venda_p, categoria_p, cod_fornecedor_p, quantidade_p);
 	RETURN LAST_INSERT_ID()
 END; //
+
+
+-- Function responsável por consultar o estoque de um determinado produto.
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION fn_consultar_estoque(id_p INT )
+RETURNS INT
+BEGIN
+	SET @qtd_estoque = (SELECT quantidade FROM cad_produto WHERE id = id_p);
+	RETURN @qtd_estoque;
+END; //
+
+--------------------* Criando todos os Stored Procedures *--------------------
+
+
+-- - -- - -- Stored Procedure: Tabela cad_produto -- - -- - -- - 
+
 
 -- Stored Procedure responsável por excluir um produto.
 
@@ -230,13 +288,19 @@ END; //
 -- - -- - -- Stored Procedure: Tabela vendasProduto-- - -- - -- -
 
 
-
--- Stored Procedure responsável por inserir um produto da venda.
+-- Stored Procedure responsável por inserir um produto da venda, somente se a quantidade a ser inserida for menor ou igual
+-- à quantidade disponível em estoque.
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE sp_inserir_vendaProduto(pedido_vp INT, produto_vp INT, preco_vp DOUBLE, quantidade_vp INT)
 BEGIN
-	INSERT INTO vendasProduto (pedido, produto, preço, quantidade) VALUES (pedido_vp, produto_vp, preco_vp, quantidade_vp);
+	SET @qtd_estoque := (SELECT quantidade FROM cad_produto WHERE id = produto_vp);
+	IF (@qtd_estoque >= quantidade_vp) THEN
+		INSERT INTO vendasProduto (pedido, produto, preço, quantidade) VALUES (pedido_vp, produto_vp, preco_vp, quantidade_vp);
+		SELECT 'Registro inserido com sucesso!' AS ok;
+	ELSE 
+		SELECT 'Quantidade não disponível em estoque!' AS erro;
+	END IF;
 END; //
 
 -- Stored Procedure responsável por excluir um produto da venda.
@@ -466,3 +530,6 @@ BEGIN
 END; //
 
 -- Function
+
+
+
