@@ -55,7 +55,26 @@ create table vendas(
     PRIMARY KEY(id_venda)
 )ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
 
+-- Tabela cad_fornecedor
 
+CREATE TABLE cad_fornecedor(
+	id INT NOT NULL AUTO_INCREMENT,
+	nome VARCHAR(50) NOT NULL,
+	cnpj VARCHAR(15) NOT NULL,
+	endereco VARCHAR(80) NOT NULL,
+	cidade VARCHAR(40) NOT NULL,
+	telefone VARCHAR(20) NOT NULL,
+	PRIMARY KEY(id)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
+
+-- Tabela cad_categoria
+
+CREATE TABLE cad_categoria(
+	id INT NOT NULL AUTO_INCREMENT,
+	nome VARCHAR(50) NOT NULL,
+	descricao VARCHAR(70) NOT NULL,
+	PRIMARY KEY(id)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
 
 -- Tabela Cadastro de contas a pagar
 
@@ -84,9 +103,8 @@ CREATE TABLE cad_contaReceber(
 
 
 
-
-
 --------------------* Criando todas as Views *--------------------
+
 
 -- Visão responsável por listar todos os produtos cadastrados.
 
@@ -529,7 +547,39 @@ BEGIN
 	SELECT * FROM cad_contaReceber;
 END; //
 
--- Function
+
+
+------------------* Criando todas os Triggers (Gatilhos) *--------------------
+
+
+-- Gatilhos de INSERT
+
+-- Gatilho responsável por atualizar o estoque de um produto após inserir um registro na tabela "vendasProduto".
+
+DELIMITER //
+CREATE OR REPLACE TRIGGER tr_apos_inserir_vendasProdutos AFTER INSERT ON vendasProduto FOR EACH ROW 
+BEGIN
+	UPDATE cad_produto SET quantidade = quantidade - NEW.quantidade
+	WHERE id = NEW.produto;
+END; //
 
 
 
+-- Gatilhos de DELETE
+
+-- Gatilho respnsável por aumentar o estoque de um produto antes de excluir um registro da tabela "vendasProduto"
+
+DELIMITER //
+CREATE OR REPLACE TRIGGER tr_antes_excluir_vendasProdutos BEFORE DELETE ON vendasProduto FOR EACH ROW  
+BEGIN
+	UPDATE cad_produto SET quantidade = quantidade + OLD.quantidade WHERE id = OLD.produto;
+END; //
+
+
+-- Gatilho responsável por zerar o estoque de todos os produtos vinculados a uma categoria, antes que ela seja excluida.
+
+DELIMITER //
+CREATE OR REPLACE TRIGGER tr_antes_excluir_categoria BEFORE DELETE ON cad_categoria FOR EACH ROW
+BEGIN
+	UPDATE cad_produto SET quantidade = 0 WHERE categoria = OLD.id;
+END; //
