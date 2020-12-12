@@ -4,9 +4,29 @@ USE bdlsi;
 
 --------------------* Criando todas as tabelas do BD *--------------------
 
--- Tabela cad_produto
+-- Tabela cad_fornecedor
 
-DROP TABLE IF EXISTS `cad_produto`;
+CREATE TABLE cad_fornecedor(
+	id INT NOT NULL AUTO_INCREMENT,
+	nome VARCHAR(50) NOT NULL,
+	cnpj VARCHAR(18) NOT NULL,
+	endereco VARCHAR(80) NOT NULL,
+	cidade VARCHAR(40) NOT NULL,
+	telefone VARCHAR(20) NOT NULL,
+	PRIMARY KEY(id)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
+
+-- Tabela cad_categoria
+
+CREATE TABLE cad_categoria(
+	id INT NOT NULL AUTO_INCREMENT,
+	nome VARCHAR(50) NOT NULL,
+	descricao VARCHAR(70) NOT NULL,
+	PRIMARY KEY(id)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
+
+
+-- Tabela cad_produto
 
 CREATE TABLE `cad_produto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -32,7 +52,16 @@ create table cad_usuario(
     senha varchar(32) not null,
     administrador tinyint(1),
     PRIMARY KEY(id)
-)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
+
+-- Tabela vendas
+
+create table vendas(
+    id_venda int not null auto_increment,
+    data date,
+    forma_pagamento varchar(20),
+    PRIMARY KEY(id_venda)
+)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
 
 -- Tabela vendasProduto
 
@@ -46,35 +75,6 @@ create table vendasProduto(
     FOREIGN KEY (pedido) REFERENCES vendas (id_venda)
 )ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Tabela vendas
-
-create table vendas(
-    id_venda int not null auto_increment,
-    data date,
-    forma_pagamento varchar(20),
-    PRIMARY KEY(id_venda)
-)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
-
--- Tabela cad_fornecedor
-
-CREATE TABLE cad_fornecedor(
-	id INT NOT NULL AUTO_INCREMENT,
-	nome VARCHAR(50) NOT NULL,
-	cnpj VARCHAR(15) NOT NULL,
-	endereco VARCHAR(80) NOT NULL,
-	cidade VARCHAR(40) NOT NULL,
-	telefone VARCHAR(20) NOT NULL,
-	PRIMARY KEY(id)
-)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
-
--- Tabela cad_categoria
-
-CREATE TABLE cad_categoria(
-	id INT NOT NULL AUTO_INCREMENT,
-	nome VARCHAR(50) NOT NULL,
-	descricao VARCHAR(70) NOT NULL,
-	PRIMARY KEY(id)
-)ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=UTF8;
 
 -- Tabela Cadastro de contas a pagar
 
@@ -140,7 +140,7 @@ CREATE OR REPLACE VIEW listarVenda AS
 
 CREATE OR REPLACE VIEW listarVendaPorPagamento AS
 	SELECT v.`data` AS 'Data da venda', p.descricao AS 'Produto vendido', vp.quantidade AS 'Quantidade',
-	vp.preço AS 'Valor', FROM vendas v INNER JOIN vendasProduto vp 
+	vp.preço AS 'Valor' FROM vendas v INNER JOIN vendasProduto vp 
 	ON v.id_venda = vp.pedido INNER JOIN cad_produto p
 	ON p.id = vp.produto
 	WHERE v.forma_pagamento = '?';
@@ -158,7 +158,7 @@ RETURNS INT
 BEGIN
 	INSERT INTO cad_produto(codigo, descricao, preco_custo, preco_venda, categoria, cod_fornecedor, quantidade)
 	VALUES (codigo_p, descricao_p, preco_custo_p, preco_venda_p, categoria_p, cod_fornecedor_p, quantidade_p);
-	RETURN LAST_INSERT_ID()
+	RETURN LAST_INSERT_ID();
 END; //
 
 
@@ -171,6 +171,17 @@ BEGIN
 	SET @qtd_estoque = (SELECT quantidade FROM cad_produto WHERE id = id_p);
 	RETURN @qtd_estoque;
 END; //
+
+-- Function responsável por inserir uma venda.
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION fn_inserir_venda(data_v DATE, pagamento VARCHAR(20))
+RETURNS INT
+BEGIN
+	INSERT INTO vendas (data, forma_pagamento) VALUES (data_v, pagamento);
+	RETURN LAST_INSERT_ID();
+END; //
+
 
 --------------------* Criando todos os Stored Procedures *--------------------
 
@@ -263,11 +274,9 @@ END; //
 -- Stored Procedure responsável por inserir uma nova venda.
 
 DELIMITER //
-CREATE OR REPLACE FUNCTION fn_inserir_venda(data_v DATE, pagamento VARCHAR(20))
-RETURNS INT
+CREATE OR REPLACE PROCEDURE sp_inserir_venda(data_v DATE, pagamento VARCHAR(20))
 BEGIN
 	INSERT INTO vendas (data, forma_pagamento) VALUES (data_v, pagamento);
-	RETURN LAST_INSERT_ID();
 END; //
 
 -- Stored Procedure responsável por excluir uma venda.
@@ -542,17 +551,16 @@ END; //
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE sp_listar_contaReceber()
-RETURNS INT
 BEGIN
 	SELECT * FROM cad_contaReceber;
 END; //
 
 
 
-------------------* Criando todas os Triggers (Gatilhos) *--------------------
+------------------* Criando todos os Triggers (Gatilhos) *--------------------
 
 
--- Gatilhos de INSERT
+-- Gatilho de INSERT
 
 -- Gatilho responsável por atualizar o estoque de um produto após inserir um registro na tabela "vendasProduto".
 
