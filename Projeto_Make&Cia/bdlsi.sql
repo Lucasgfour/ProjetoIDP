@@ -1,5 +1,7 @@
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 
+CREATE DATABASE bdlsi;
+
 USE bdlsi;
 
 --------------------* Criando todas as tabelas do BD *--------------------
